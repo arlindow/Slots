@@ -30,6 +30,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #fff;
+    transition: transform 0.5s ease-out; /* Animação para suavizar */
 }
 
 button {
@@ -46,4 +47,13 @@ button {
     margin-top: 20px;
     font-size: 24px;
     color: #333;
+}
+
+.spin {
+    animation: spinAnimation 1s ease-in-out infinite; /* Animação de rotação */
+}
+
+@keyframes spinAnimation {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
 }

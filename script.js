@@ -13,17 +13,38 @@ function getRandomSymbol() {
     return symbols[randomIndex];
 }
 
-// Função para girar os slots
+// Função para aplicar a animação de rotação e depois parar nos símbolos
 function spin() {
-    const symbol1 = getRandomSymbol();
-    const symbol2 = getRandomSymbol();
-    const symbol3 = getRandomSymbol();
+    // Aplicar a animação de rotação
+    reel1.classList.add('spin');
+    reel2.classList.add('spin');
+    reel3.classList.add('spin');
 
-    reel1.textContent = symbol1;
-    reel2.textContent = symbol2;
-    reel3.textContent = symbol3;
+    // Desativar o botão para evitar múltiplos cliques
+    spinButton.disabled = true;
 
-    checkResult(symbol1, symbol2, symbol3);
+    // Após 1 segundo (tempo da animação), parar os rolos e exibir o resultado
+    setTimeout(() => {
+        reel1.classList.remove('spin');
+        reel2.classList.remove('spin');
+        reel3.classList.remove('spin');
+
+        // Gerar os símbolos aleatórios para os rolos
+        const symbol1 = getRandomSymbol();
+        const symbol2 = getRandomSymbol();
+        const symbol3 = getRandomSymbol();
+
+        // Exibir os símbolos nos respectivos rolos
+        reel1.textContent = symbol1;
+        reel2.textContent = symbol2;
+        reel3.textContent = symbol3;
+
+        // Checar o resultado
+        checkResult(symbol1, symbol2, symbol3);
+
+        // Reativar o botão
+        spinButton.disabled = false;
+    }, 1000);
 }
 
 // Função para checar o resultado

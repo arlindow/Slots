@@ -3,9 +3,16 @@ const reel2 = document.getElementById('reel2');
 const reel3 = document.getElementById('reel3');
 const resultDisplay = document.getElementById('result');
 const spinButton = document.getElementById('spinButton');
+const creditAmountDisplay = document.getElementById('creditAmount');
+const betAmountInput = document.getElementById('betAmount');
+const creditInput = document.getElementById('creditInput');
+const addCreditButton = document.getElementById('addCreditButton');
 
 // Símbolos possíveis para os slots
 const symbols = ['🍇', '🍒', '🍋', '⭐', '🍉'];
+
+// Saldo Inicial de créditos
+let creditAmount = 100;
 
 // Função para gerar um símbolo aleatório
 function getRandomSymbol() {
@@ -15,6 +22,18 @@ function getRandomSymbol() {
 
 // Função para aplicar a animação de rotação e depois parar nos símbolos
 function spin() {
+    const betAmount = parseInt(betAmountInput.value);
+
+    // Verifica se o jogador tem créditos suficientes para apostar
+    if (betAmount > creditAmount) {
+        resultDisplay.textContent = 'Créditos insuficientes!';
+        return;
+    }
+
+    // Subtrai a aposta dos créditos
+    creditAmount -= betAmount;
+    updateCreditDisplay();
+
     // Aplicar a animação de rotação
     reel1.classList.add('spin');
     reel2.classList.add('spin');
@@ -40,7 +59,7 @@ function spin() {
         reel3.textContent = symbol3;
 
         // Checar o resultado
-        checkResult(symbol1, symbol2, symbol3);
+        checkResult(symbol1, symbol2, symbol3, betAmount);
 
         // Reativar o botão
         spinButton.disabled = false;
@@ -48,13 +67,61 @@ function spin() {
 }
 
 // Função para checar o resultado
-function checkResult(symbol1, symbol2, symbol3) {
+function checkResult(symbol1, symbol2, symbol3, betAmount) {
     if (symbol1 === symbol2 && symbol2 === symbol3) {
-        resultDisplay.textContent = 'Jackpot! 🎉';
+        const winnings = betAmount * 3; // O jogador ganha 3x o valor apostado
+        creditAmount += winnings;
+        resultDisplay.textContent = `Jackpot! 🎉🎉🎉 Você ganhou ${winnings} créditos!`;
     } else {
         resultDisplay.textContent = 'Tente novamente!';
+
+        // Após 1 segundo, limpar o resultado
+        setTimeout(() => {
+            resultDisplay.textContent = '';
+        }, 1000);
+        
+    }
+    updateCreditDisplay();
+}
+
+// Função para adicionar créditos
+function addCredits() {
+    const creditToAdd = parseInt(creditInput.value);
+
+    // Verifica se o valor é válido
+    if (!isNaN(creditToAdd) && creditToAdd > 0) {
+        creditAmount += creditToAdd; // Adiciona os créditos ao saldo atual
+        updateCreditDisplay(); // Atualiza a exibição dos créditos
+        creditInput.value = ''; // Limpa o campo de input
+        resultDisplay.textContent = `Você adicionou ${creditToAdd} créditos!`;
+    } else {
+        resultDisplay.textContent = 'Por favor, insira um valor válido para adicionar créditos.';
     }
 }
 
-// Adiciona evento ao botão
+// Atualiza a exibição dos créditos e salva
+function updateCreditDisplay() {
+    creditAmountDisplay.textContent = creditAmount;
+    saveCredits(); // Salva os créditos no localStorage
+}
+
+// Carregar o saldo salvo no localStorage
+function loadCredits() {
+    const savedCredits = localStorage.getItem('creditAmount');
+    if (savedCredits !== null) {
+        creditAmount = parseInt(savedCredits);
+    }
+    updateCreditDisplay();
+}
+
+// Salvar o saldo no localStorage
+function saveCredits() {
+    localStorage.setItem('creditAmount', creditAmount);
+}
+
+// Chama a função para carregar os créditos quando o jogo é aberto
+loadCredits();
+
+// Adiciona eventos aos botões
 spinButton.addEventListener('click', spin);
+addCreditButton.addEventListener('click', addCredits);

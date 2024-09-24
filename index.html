@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slots do Tigrinho</title>
+    <title>Jogo de Slots</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="slot-machine">
-        <div class="reel" id="reel1">🍇</div>
+        <div class="reel" id="reel1">🍒</div>
         <div class="reel" id="reel2">🍇</div>
-        <div class="reel" id="reel3">🍇</div>
+        <div class="reel" id="reel3">🍉</div>
     </div>
-    <button id="spinButton">Girar!</button>
-    <p id="result"></p>
+
+    <div id="controls">
+        <label for="betAmount">Aposta:</label>
+        <input type="number" id="betAmount" min="1" max="100" value="10">
+        <button id="spinButton">Girar!</button>
+        
+        <div id="addCredits">
+            <label for="creditInput">Adicionar Créditos:</label>
+            <input type="number" id="creditInput" min="1" placeholder="Créditos">
+            <button id="addCreditButton">Adicionar</button>
+        </div>
+        
+        <p>Créditos: <span id="creditAmount">100</span></p>
+        <p id="result"></p>
+    </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-

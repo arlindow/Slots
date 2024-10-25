@@ -1,2 +1,2 @@
-# jogo_do_tigrinho
+# Slots
 html_css_js
